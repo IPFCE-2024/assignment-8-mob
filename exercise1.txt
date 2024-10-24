@@ -1,0 +1,15 @@
+a) How many arithmetic operations (+, −, ∗, /) are required to compute fact(5)?
+
+The loop runs from i = 1 to i <= 5, so there are 5 iterations.
+
+In each iteration, one multiplication operation is performed: f = i * f.
+So, for fact(5), there will be 5 multiplication operations.
+
+b) 
+
+For any positive integer n, the loop will run n times (from i = 1 to i = n), 
+performing one multiplication per iteration.
+
+So, for fact(n), there will be n multiplication operations.
+Thus, n arithmetic operations (multiplication) are required to compute fact(n) 
+for any positive integer n.
