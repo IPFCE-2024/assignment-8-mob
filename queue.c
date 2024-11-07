@@ -1,55 +1,63 @@
 #include "queue.h"
-#include <stdlib.h>
-#include <assert.h>
-
+#include <stdlib.h> // NULL
+#include <stdio.h> // printf
 
 void initialize(queue *q) {
+    // Initialize queue by setting size to 0
+    q->size = 0;
+    // Initialize pointers for front and rear to NULL
     q->front = NULL;
     q->rear = NULL;
-    q->size = 0;
 }
 
 bool empty(const queue *q) {
+    // Returns wether queuesize is 0; queue is empty
     return (q->size == 0);
 }
 
 bool full(const queue *q) {
-    return false;  // The queue can't be "full" in a linked list implementation
+    // Queue cant be full; return false
+    return false;
 }
 
 void enqueue(queue *q, int x) {
-    node *newNode = (node *)malloc(sizeof(node));
-    assert(newNode != NULL);  // Ensure memory allocation was successful
-    newNode->data = x;
-    newNode->next = NULL;
-
-    if (q->rear == NULL) {
-        // If the queue is empty, both front and rear point to the new node
-        q->front = newNode;
-        q->rear = newNode;
-    } else {
-        // Attach the new node to the end of the queue and update the rear
-        q->rear->next = newNode;
-        q->rear = newNode;
+    // If queue is full; print error
+    if (full(q)) {
+        printf("Queue is full");
+        abort();
     }
-
+    // Create new node to insert in queue
+    node *new_node = malloc(sizeof(node));
+    // Insert value in data of new node and set next to NULL
+    new_node->data = x;
+    new_node->next = NULL;
+    if (empty(q)) { // If queue is empty; initialize front and rear
+        q->front = new_node;
+    } else { // Else add node in rear of queue
+        q->rear->next = new_node;
+    }
+    // Set new node as rear of queue
+    q->rear = new_node;
+    // Add 1 to size of queue
     q->size++;
 }
 
-// Function to dequeue an element (remove from the front)
 int dequeue(queue *q) {
-    assert(!empty(q));  // Ensure the queue is not empty
-
-    node *temp = q->front;
-    int data = temp->data;
-
-    q->front = q->front->next;
-    if (q->front == NULL) {
-        q->rear = NULL;  // If the queue becomes empty, set rear to NULL as well
+    if (empty(q)) {
+        printf("Queue is empty");
+        abort();
     }
-
-    free(temp);
+    node *old_front = q->front;
+    // Set 2nd in queue as front, will assign NULL if empty
+    q->front = q->front->next;
+    // Remove 1 from size of queue
     q->size--;
-
-    return data;
+    if (empty(q)) { // If queue is now empty; set rear to NULL
+        q->rear = NULL;
+    }
+    // Initialize placeholder for data in old front and free memory
+    int old_front_data = old_front->data;
+    free (old_front);
+    // Return front of queue
+    return old_front_data;
 }

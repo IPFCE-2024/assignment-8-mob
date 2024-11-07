@@ -1,41 +1,50 @@
-#include "insertion_sort.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include "insertion_sort.h"
 
 node* isort(node *list) {
+    // If the list is empty or only has one node; list is already sorted
     if (list == NULL || list->next == NULL) {
-        // List is already sorted if it's empty or contains only one node
         return list;
     }
-
-    // Initialize sorted linked list
-    node *sorted = NULL;
-    node *current = list;
-
-    // Traverse the original list and insert each node into the sorted list
+    // Initialize pointer node for header of list
+    node *head = list;
+    // Initialize current node
+    node *current = list->next;
+    // Initialize prev in order to prevent errors
+    node *prev = list;
+    // While loop that sorts the list by changing pointers of nodes in list
     while (current != NULL) {
-        // Save the next node to continue traversal later
+        // Store next node of original list
         node *next = current->next;
-
-        // Insert the current node into the sorted part of the list
-        if (sorted == NULL || sorted->data >= current->data) {
-            // Insert at the beginning of the sorted list
-            current->next = sorted;
-            sorted = current;
+        // If current node is smallest; place first and reassign pointer node for header
+        if (current->data < head->data) {
+            // Set current node to point to previous header node
+            current->next = head;
+            // Set pointer node for header to point at new header node
+            head = current;
+            // Remove current from its original position
+            prev->next = next;
         } else {
-            // Find the position to insert the current node in the sorted list
-            node *temp = sorted;
+            // Initialize pointer node for going through already sorted list
+            node *temp = head;
+            // Locate the node that should be right before current
             while (temp->next != NULL && temp->next->data < current->data) {
                 temp = temp->next;
             }
-            // Insert the node at the correct position
-            current->next = temp->next;
-            temp->next = current;
+            if (temp->next != current) {
+                // Place current node after temp and reassign pointers
+                current->next = temp->next;
+                temp->next = current;
+                // Remove current from its original position
+                prev->next = next;
+            } else {
+                prev = current;  // Keep prev if current is not moved
+            }
         }
-
-        // Move to the next node in the unsorted list
+        // Prepare current for next iteration, taking next in original list
         current = next;
     }
-
-    // Return the head of the sorted list
-    return sorted;
+    // Return pointer node for header of list
+    return head;
 }

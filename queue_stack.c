@@ -1,37 +1,46 @@
-#include <stdlib.h>
-#include <assert.h>
 #include "queue_stack.h"
+#include <stdlib.h> // NULL
+#include "stack.h"
 
-// Initialize the queue by initializing both stacks
 void initialize(queue *q) {
-    initialize(&q->s1);
-    initialize(&q->s2);
+    q->size = 0;
+    q->stack1 = malloc(sizeof(stack));
+    q->stack2 = malloc(sizeof(stack));
+    stack_initialize(q->stack1);
+    stack_initialize(q->stack2);
 }
 
-// Check if the queue is empty by checking both stacks
 bool empty(const queue *q) {
-    return empty(&q->s1) && empty(&q->s2);
+    return (stack_empty(q->stack1) && stack_empty(q->stack2));
 }
 
-// Since we're using linked lists for stacks, the queue is never full
 bool full(const queue *q) {
-    return false;  // The queue can't be "full" in a linked list implementation
+    return false;
 }
 
-// Enqueue operation: Push the element onto stack s1
 void enqueue(queue *q, int x) {
-    push(&q->s1, x);
+    // If queue is full; print error
+    if (full(q)) {
+        printf("Queue is full");
+        abort();
+    }
+    stack_push(x, q->stack1);
+    q->size++;
 }
 
-// Dequeue operation: Pop from stack s2 if not empty; otherwise, transfer elements
 int dequeue(queue *q) {
-    if (empty(&q->s2)) {
-        // Transfer all elements from s1 to s2
-        while (!empty(&q->s1)) {
-            int data = pop(&q->s1);
-            push(&q->s2, data);
-        }
+    // If queue is empty; print error
+    if (empty(q)) {
+        printf("Queue is empty");
+        abort();
     }
-    // Now pop the element from s2
-    return pop(&q->s2);
+    for (int i = 1; i < q->size; i++) {
+        stack_push(stack_pop(q->stack1), q->stack2);
+    }
+    int value = stack_pop(q->stack1);
+    for (int i = 1; i < q->size; i++) {
+        stack_push(stack_pop(q->stack2), q->stack1);
+    }
+    q->size--;
+    return value;
 }

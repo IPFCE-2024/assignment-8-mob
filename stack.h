@@ -11,8 +11,8 @@ typedef struct {
   node *head;
 } stack;
 
-void initialize(stack *s);
-void push(int element, stack *s);
-int pop(stack *s);
-bool empty(stack *s);
-bool full(stack *s);
+void stack_initialize(stack *s);
+void stack_push(int element, stack *s);
+int stack_pop(stack *s);
+bool stack_empty(stack *s);
+bool stack_full(stack *s);

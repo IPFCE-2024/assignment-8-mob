@@ -1,0 +1,15 @@
+a) How many arithmetic operations are required to compute fact(5)?
+
+    For every loop iteration, the following will happen:
+    i+1
+    i*f
+    In total, this is two arithmetic operations per loop.
+    The loop wil run n times. n is 5. 5*2=10
+    10 arithmetic opeartions are required to compute fact(5).
+
+b) How many arithmetic operations are required to compute fact(n)
+for any positive integer n?
+
+    As written previously, two arithmetic operations per loop.
+    The loop wil run n times.
+    n*2 arithmetic opeartions are required to compute fact(n).

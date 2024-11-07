@@ -1,15 +1,17 @@
 #pragma once
 
 #include <stdbool.h>
-#include "stack.h"
 
-// Define the structure for the queue using two stacks
+#include "node.h"
+
+#include "stack.h"
+ 
 typedef struct queue {
-    stack s1;
-    stack s2;
+  int size;
+  stack *stack1;
+  stack *stack2;
 } queue;
 
-// Function declarations
 void initialize(queue *q);
 bool empty(const queue *q);
 bool full(const queue *q);
